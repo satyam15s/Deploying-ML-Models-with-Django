@@ -17,24 +17,9 @@ def index_page(request):
 @api_view(["POST"])
 def predict_diabetictype(request):
     try:
-        age = request.data.get('age',None)
-        bs_fast = request.data.get('bs_fast',None)
-        bs_pp = request.data.get('bs_pp',None)
-        plasma_r = request.data.get('plasma_r',None)
-        plasma_f = request.data.get('plasma_f',None)
-        hbA1c = request.data.get('hbA1c',None)
-        fields = [age,bs_fast,bs_pp,plasma_r,plasma_f,hbA1c]
-        if not None in fields:
-            #Datapreprocessing Convert the values to float
-            age = float(age)
-            bs_fast = float(bs_fast)
-            bs_pp = float(bs_pp)
-            plasma_r = float(plasma_r)
-            plasma_f = float(plasma_f)
-            hbA1c = float(hbA1c)
-            result = [age,bs_fast,bs_pp,plasma_r,plasma_f,hbA1c]
+        voice = request.data.get('voice',.wav)
             #Passing data to model & loading the model from disks
-            model_path = 'ml_model/model.pkl'
+            model_path = 'ml_model/Data_noiseNshift.h5'
             classifier = pickle.load(open(model_path, 'rb'))
             prediction = classifier.predict([result])[0]
             conf_score =  np.max(classifier.predict_proba([result]))*100
